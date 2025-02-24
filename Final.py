@@ -1,11 +1,7 @@
 from tkinter import *
 from tkinter import ttk,font,messagebox
 import os,csv,re
-import re
 from tkinter import messagebox
-
-
-
 
 def populate_form(student_data):
     id_no.delete(0, END)
@@ -36,6 +32,10 @@ def find_student_in_csv(student_id):
         messagebox.showerror("Error", "CSV file not found.")
     return None
 
+def capitalize_program_name(program_name):
+    words = program_name.split()
+    return " ".join([word.capitalize() if len(word) > 3 else word.lower() for word in words])
+
 def save_to_csv():
     global saved_label
 
@@ -65,20 +65,28 @@ def save_to_csv():
     if any(char.isdigit() for char in first_name.get()):
         errors.append("• First Name must not contain numbers.")
 
-    program_pattern = r"^([A-Za-z0-9]+(?:\s[A-Za-z0-9]+)?)\s*-\s*([A-Za-z\s]+)$"
+    program_pattern = r"^([A-Za-z]+(?:\s[A-Za-z]+){0,3})\s*-\s*([A-Za-z\s]+)$"
     match = re.match(program_pattern, program_info.get())
 
     if not match:
-        errors.append("• Program Info must be in the format 'CODE [CODE] - Program Name' (e.g., BSCS AI - Bachelor of Science in Computer Science).")
+        errors.append("• Program Info must be in the format 'CODE - Program Name' (e.g., BSCS - Bachelor of Science in Computer Science).")
     else:
         program_code = match.group(1).upper()
         program_name = match.group(2).strip()
+
+        if len(program_code.split()) > 3:
+            errors.append("• Program Code must have at most 3 spaces (e.g., 'BS CS AI').")
+
+        if any(char.isdigit() for char in program_code):
+            errors.append("• Program Code must not contain numbers.")
 
         if len(program_name) < 6:
             errors.append("• Program Name must be at least 6 characters long.")
 
         if any(char.isdigit() for char in program_name):
             errors.append("• Program Name must not contain numbers.")
+
+        program_name = capitalize_program_name(program_name)
 
         student_data[6] = f"{program_code} - {program_name}"
 
@@ -94,7 +102,7 @@ def save_to_csv():
     if college_dropdown.get() == "Select":
         errors.append("• Please select a College.")
 
-    if program_info.get() == "Ex: BSCS AI - Bachelor of Science in Computer Science" or program_info.get() == "":
+    if program_info.get() == "Ex: BSCS - Bachelor of Science in Computer Science" or program_info.get() == "":
         errors.append("• Program information is required.")
 
     if errors:
@@ -108,19 +116,19 @@ def save_to_csv():
         if not confirm:
             return  
         updated_rows = []
-        with open(file_path, "r", newline="") as file:
+        with open(file_path, "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file)
             header = next(reader)
             for row in reader:
                 if row and row[0] != student_id:
                     updated_rows.append(row)
 
-        with open(file_path, "w", newline="") as file:
+        with open(file_path, "w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file)
             writer.writerow(header)
             writer.writerows(updated_rows)
 
-    with open(file_path, mode="a", newline="") as file:
+    with open(file_path, mode="a", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
         if not file_exists:
             writer.writerow(headers)
@@ -147,7 +155,6 @@ def save_to_csv():
     frame.create_window(145, 365, window=saved_label)
 
     bind_reset_events()
-
 
 def remove_saved_label(event=None):
     global saved_label
@@ -205,7 +212,6 @@ def on_add_button_click(event):
         side_bar_canvas.itemconfig(delete_button, fill='#153E83')
         side_bar_canvas.itemconfig(delete_text, fill='#FFFFFF')
 
-    
 def button_release(event):
     side_bar_canvas.itemconfig(add_button, fill='#D7E3F5')  
     side_bar_canvas.itemconfig(add_text, fill='#154BA6')
@@ -251,8 +257,6 @@ def on_leave_edit(event):
     side_bar_canvas.itemconfig(edit_text, fill='white')
     side_bar_canvas.config(cursor="")
 
-
-
 def delete_stud(event):
     def trigger_once(event):
         on_leave_delete(event)
@@ -293,7 +297,6 @@ def delete_stud(event):
     display_students()
     restore_content()
     messagebox.showinfo("Success", f"Student ID {student_id} has been deleted!")
-
 
 def edit_stud(event):
     global frame, is_form_visible,sorting
@@ -340,7 +343,6 @@ def edit_stud(event):
         messagebox.showerror("Error", "Student not found in the CSV file.")
 
 def update_student(old_id):
-    
     file_path = "students.csv"
 
     new_data = [
@@ -365,15 +367,20 @@ def update_student(old_id):
     if any(char.isdigit() for char in first_name.get()):
         errors.append("• First Name must not contain numbers.")
 
-
-    program_pattern = r"^([A-Za-z0-9]+(?:\s[A-Za-z0-9]+)?)\s*-\s*([A-Za-z\s]+)$"
+    program_pattern = r"^([A-Za-z]+(?:\s[A-Za-z]+){0,3})\s*-\s*([A-Za-z\s]+)$"
     match = re.match(program_pattern, program_info.get())
 
     if not match:
-        errors.append("• Program Info must be in the format 'CODE [CODE] - Program Name' (e.g., BSCS - Bachelor of Science in Computer Science).")
+        errors.append("• Program Info must be in the format 'CODE - Program Name' (e.g., BSCS - Bachelor of Science in Computer Science).")
     else:
         program_code = match.group(1).upper()  
         program_name = match.group(2).strip()
+
+        if len(program_code.split()) > 3:
+            errors.append("• Program Code must have at most 3 spaces (e.g., 'BS CS AI').")
+
+        if any(char.isdigit() for char in program_code):
+            errors.append("• Program Code must not contain numbers.")
 
         if len(program_name) < 6:
             errors.append("• Program Name must be at least 6 characters long.")
@@ -381,8 +388,9 @@ def update_student(old_id):
         if any(char.isdigit() for char in program_name):
             errors.append("• Program Name must not contain numbers.")
 
-        new_data[6] = f"{program_code} - {program_name}" 
+        program_name = capitalize_program_name(program_name)
 
+        new_data[6] = f"{program_code} - {program_name}" 
 
     if "" in new_data[:3]: 
         errors.append("• All fields (ID No., Last Name, First Name) must be filled out.")
@@ -399,11 +407,10 @@ def update_student(old_id):
     if program_info.get() == "Ex: BSCS - Bachelor of Science in Computer Science" or program_info.get() == "":
         errors.append("• Program information is required.")
 
-
     try:
-        with open(file_path, "r", newline="") as file:
+        with open(file_path, "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file)
-            next(reader) 
+            next(reader)  
             for row in reader:
                 if row and row[0] == new_data[0] and row[0] != old_id:
                     errors.append(f"• Student ID {new_data[0]} already exists. Please use a different ID.")
@@ -411,11 +418,9 @@ def update_student(old_id):
     except FileNotFoundError:
         errors.append("• Student database (CSV file) not found.")
 
-
     if errors:
         messagebox.showerror("Form Error", "There are errors in your form:\n\n" + "\n".join(errors))
         return
-
 
     confirm = messagebox.askyesno("Confirm Update", f"Replace data for student ID {old_id}?")
     if not confirm:
@@ -423,26 +428,22 @@ def update_student(old_id):
 
     updated_rows = []
     try:
-        with open(file_path, "r", newline="") as file:
+        with open(file_path, "r", newline="", encoding="utf-8") as file:
             reader = csv.reader(file)
             headers = next(reader)
             for row in reader:
                 if row and row[0] != old_id: 
                     updated_rows.append(row)
 
-
         updated_rows.append(new_data)
-
 
         with open(file_path, "w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file)
             writer.writerow(headers)
             writer.writerows(updated_rows)
 
-        
         messagebox.showinfo("Success", "Student information updated!")
 
-       
         display_students()
         restore_content()
 
@@ -450,7 +451,6 @@ def update_student(old_id):
         messagebox.showerror("Error", "The student database file could not be found.")
     except Exception as e:
         messagebox.showerror("Error", f"An unexpected error occurred while updating the student record:\n\n{str(e)}")
-
 
 def on_sidebar_resize(event):
     global add_button, add_text, edit_button, edit_text, delete_button, delete_text, edit_icon_img, delete_icon_img,delete_icon,edit_icon,delete_icon_img
@@ -607,6 +607,7 @@ def on_root_resize(event):
 root = Tk()
 root.geometry("1100x605")
 root.minsize(510, 200)
+root.title(" ")
 root.configure(bg="white")
 root.rowconfigure(1, weight=1)
 root.columnconfigure(0,minsize=220)
