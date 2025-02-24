@@ -585,15 +585,23 @@ def restore_placeholder(event=None):
         text_label.place(x=x1 + 15, y=y1 + 1)
 
 def remove_focus(event):
+    global sorting
     widget = event.widget
+
+    # Ignore clicks on UI elements (so selection & form stay when clicking buttons, entries, etc.)
     if isinstance(widget, (Entry, Button, ttk.Combobox, ttk.Treeview, Label, Canvas)):
-        return 
+        return  # Do nothing if clicking a UI element
+
 
     tree.selection_remove(tree.selection())
 
     cancel_butt.pack_forget()
     search_var.set("")
     root.focus_set()
+    if sorting:
+        sorting.destroy()
+        sorting=None
+        sort_canvas.itemconfig(sort_frame, fill="white")
 
 def toggle_selection(event):
     clicked_item = tree.identify_row(event.y) 
@@ -721,18 +729,24 @@ def on_select(event):
     event.widget.configure(foreground="black")
 
 def toggle_form():
-    global is_form_visible,text, round, form_widgets,last_name,first_name,gender_dropdown,id_no,year_dropdown,college_dropdown,program_info,submit_canvas
+    global sorting,is_form_visible,text, round, form_widgets,last_name,first_name,gender_dropdown,id_no,year_dropdown,college_dropdown,program_info,submit_canvas
 
     if is_form_visible:
         restore_content()
     else:
         is_form_visible = True
+
+        if sorting:
+            sorting.destroy()
+            sorting=None
+            sort_canvas.itemconfig(sort_frame, fill="white")
+
         style = ttk.Style()
         style.configure("Custom.TCombobox", foreground="") 
         style.configure("Custom.TCombobox",relief="flat",foreground="gray")
 
         round = create_rounded_rectangle(frame, -300, 0, 287, 430, radius=130,fill='lightgray')
-        form_widgets.append(round)  
+        form_widgets.append(round)  # Store rectangle ID
 
         text = Label(root,text="Student Form", font=("Arial", 20, "bold"), bg="lightgray",fg="#2363C6")
         frame.create_window(130,30,window=text)
@@ -838,10 +852,10 @@ def toggle_form():
             save_to_csv()
             
         def submit_hover(event):
-            submit_canvas.itemconfig(submit, fill='#154BA6')
+            submit_canvas.itemconfig(submit, fill='#154BA6')  # Slightly different hover color
             submit_canvas.config(cursor="hand2")
         def on_submit_leave(event):
-            submit_canvas.itemconfig(submit, fill='#2363C6')
+            submit_canvas.itemconfig(submit, fill='#2363C6')  # Restore original color
             submit_canvas.config(cursor="")
 
 
@@ -850,17 +864,17 @@ def toggle_form():
               # Darker red on click
 
         def close_release(event):
-            close_canvas.itemconfig(close, fill='#AA4141') 
+            close_canvas.itemconfig(close, fill='#AA4141')  # Restore original color
             if 'saved_label' in globals() and saved_label is not None:
                 remove_saved_label()
             restore_content()
 
         def close_hover(event):
-            close_canvas.itemconfig(close, fill='#9B3535') 
+            close_canvas.itemconfig(close, fill='#9B3535')  # Slightly different hover color
             close_canvas.config(cursor="hand2")
 
         def close_leave(event):
-            close_canvas.itemconfig(close, fill='#AA4141')
+            close_canvas.itemconfig(close, fill='#AA4141')  # Restore original color
             close_canvas.config(cursor="")
 
 
@@ -887,7 +901,6 @@ def toggle_form():
         close_canvas.bind("<ButtonRelease-1>", close_release)
         close_canvas.bind("<Enter>", close_hover)
         close_canvas.bind("<Leave>", close_leave)
-
 def restore_content(event=None):
     global is_form_visible, form_widgets
     frame.grid_forget()
@@ -1005,6 +1018,52 @@ def display_students():
             else:
                 tree.after(1, lambda: tree.selection_set(clicked_item)) 
     tree.bind("<Button-1>", toggle_selection)
+
+def sort_click(event):
+    sort_canvas.itemconfig(sort_frame, fill="light gray")
+
+def sort_click_release(event):
+    global sorting
+
+    if sorting:
+        sorting.destroy()  # Remove sorting menu
+        sorting = None
+
+
+        sort_canvas.itemconfig(sort_frame, fill="white")  # Reset button color
+    else:
+        # Create sorting menu
+        style = ttk.Style()
+        style.configure("Custom.TCombobox", foreground="") 
+        style.configure("Custom.TCombobox",relief="flat",foreground="gray")
+
+        sorting = Canvas(content_frame, width=100, height=150, bg="white", highlightthickness=0)
+        sorting_frame = create_rounded_rectangle(sorting, 0, 0, 100, 150, radius=20, fill="light gray") 
+        sorting.grid(row=0, column=0, sticky="ne", padx=(0, 70))
+
+        sort_text = Label(root,text="Sort By:", font=("Arial", 10, "bold"), bg="light gray",fg="black")
+        sorting.create_window(30,15,window=sort_text)
+
+        name_sort = ttk.Combobox(root,style="Custom.TCombobox",values=["Ascending", "Descending"], state="readonly", width=10)
+        sorting.create_window(45,40,window=name_sort)
+        name_sort.set("Name") 
+        name_sort.bind("<<CoboxboxSelected>>",on_select)
+
+        id_sort = ttk.Combobox(root,style="Custom.TCombobox",values=["Ascending", "Descending"], state="readonly", width=10)
+        sorting.create_window(45,70,window=id_sort)
+        id_sort.set("ID No.") 
+        id_sort.bind("<<CoboxboxSelected>>",on_select)
+
+
+sorting = None
+sort_canvas = Canvas(header,width=40,height=40,highlightthickness=0,bd=0,bg="white")
+sort_canvas.grid(row=0,column=1,padx=(0,70),pady=0,sticky="e")
+sort_frame = create_rounded_rectangle(sort_canvas, 4, 7, 35, 35, radius=20, fill="white") 
+sort = PhotoImage(file="Images/sort.png")
+sort_canvas.create_image(20, 20, image=sort, anchor="center")  # Centered in the button
+
+sort_canvas.bind("<Button-1>",sort_click)
+sort_canvas.bind("<ButtonRelease-1>",sort_click_release)
 
 display_students()
 root.bind("<Configure>",on_root_resize)
