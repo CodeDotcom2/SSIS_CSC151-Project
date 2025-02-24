@@ -1,6 +1,5 @@
 ID No.,Last Name,First Name,Gender,Year Level,College,Program
 2023-1234,Enario,Sheldon Ed,Male,2nd,CCS - College of Computer Studies,BSCS - Bachelor of Science in Computer Science
-2023-1121,Santiago,Andrea Louise,Female,4th,CASS - College of Arts and Social Sciences,ABPS - Bachelor of Arts in Political Science
 2023-1415,Ramirez,Nathaniel James,Male,2nd,CCS - College of Computer Studies,BSIT - Bachelor of Science in Information Technology
 2023-1617,Villanueva,Jessica Marie,Female,1st,CHS - College of Health Sciences,BSN - Bachelor of Science in Nursing
 2023-1819,Cruz,Paolo Miguel,Male,3rd,CSM - College of Science and Mathematics,BSChem - Bachelor of Science in Chemistry
@@ -9,7 +8,6 @@ ID No.,Last Name,First Name,Gender,Year Level,College,Program
 2023-2425,Mendoza,Samantha Rose,Female,1st,CEBA - College of Economics Business and Accountancy,BSBA - Bachelor of Science in Business Administration
 2023-2627,Santos,Jeremy Paul,Male,2nd,CCS - College of Computer Studies,BSCS AI - Bachelor of Science in Computer Science Major in AI
 2023-2829,Bautista,Lianne Grace,Female,3rd,CASS - College of Arts and Social Sciences,ABComm - Bachelor of Arts in Communication
-2023-3031,Fernandez,Christian Dale,Male,2nd,COET - College of Engineering and Technology,BSME - Bachelor of Science in Mechanical Engineering
 2023-3233,Lazaro,Patricia Mae,Female,1st,CHS - College of Health Sciences,BSMT - Bachelor of Science in Medical Technology
 2023-3435,Domingo,Joshua Allen,Male,4th,CSM - College of Science and Mathematics,BSMath - Bachelor of Science in Mathematics
 2023-3637,Navarro,Christine Joy,Female,2nd,CEBA - College of Economics Business and Accountancy,BSBA FM - Bachelor of Science in Business Administration Major in Financial Management
@@ -28,3 +26,4 @@ ID No.,Last Name,First Name,Gender,Year Level,College,Program
 2023-6263,Ortega,Nathan Elijah,Male,1st,CSM - College of Science and Mathematics,BSES - Bachelor of Science in Environmental Science
 2023-6465,De Leon,Isabella Faye,Female,3rd,CHS - College of Health Sciences,BSRadTech - Bachelor of Science in Radiologic Technology
 2024-1234,Enario,Sheldon Ed,Male,2nd,CCS - College of Computer Studies,BSCS - Bacher of Science in Computer Science
+2023-3031,Boboy Casino,Drilon,Female,2nd,CCS - College of Computer Studies,BSCS - ambot unsa bsta kana

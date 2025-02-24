@@ -1041,7 +1041,6 @@ def sort_id():
     else:
         id_text.configure(text="Ascending")
 
-    print(f"Sorted displayed students by ID ({'Descending' if id_reverse else 'Ascending'})")
 
 def sort_name(event=None):
     global tree, sort_order
