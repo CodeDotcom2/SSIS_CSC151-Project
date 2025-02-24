@@ -9,17 +9,17 @@ from tkinter import messagebox
 
 def populate_form(student_data):
     id_no.delete(0, END)
-    id_no.insert(0, student_data[0]) 
+    id_no.insert(0, student_data[0])
 
     last_name.delete(0, END)
-    last_name.insert(0, student_data[1]) 
+    last_name.insert(0, student_data[1])
 
     first_name.delete(0, END)
-    first_name.insert(0, student_data[2]) 
+    first_name.insert(0, student_data[2])
 
-    gender_dropdown.set(student_data[3]) 
-    year_dropdown.set(student_data[4]) 
-    college_dropdown.set(student_data[5])  
+    gender_dropdown.set(student_data[3])
+    year_dropdown.set(student_data[4])
+    college_dropdown.set(student_data[5])
 
     program_info.delete(0, END)
     program_info.insert(0, student_data[6])
@@ -33,7 +33,7 @@ def find_student_in_csv(student_id):
                 if row and row[0] == student_id:
                     return row 
     except FileNotFoundError:
-        messagebox.showerror("Error", "CSV file not found. Creating file")
+        messagebox.showerror("Error", "CSV file not found.")
     return None
 
 def save_to_csv():
@@ -53,8 +53,6 @@ def save_to_csv():
         program_info.get()
     ]
 
-
-    #error handling
     errors = []
 
     id_pattern = r"^\d{4}-\d{4}$"
@@ -104,23 +102,19 @@ def save_to_csv():
         return
 
     file_exists = os.path.exists(file_path)
-
     existing_student = find_student_in_csv(student_id)
     if existing_student:
-        
         confirm = messagebox.askyesno("ID Already Exists", f"A student with ID No. {student_id} already exists.\n\nDo you want to override their information?")
         if not confirm:
             return  
-
         updated_rows = []
         with open(file_path, "r", newline="") as file:
             reader = csv.reader(file)
             header = next(reader)
             for row in reader:
-                if row and row[0] != student_id: 
+                if row and row[0] != student_id:
                     updated_rows.append(row)
 
-   
         with open(file_path, "w", newline="") as file:
             writer = csv.writer(file)
             writer.writerow(header)
@@ -146,7 +140,7 @@ def save_to_csv():
     program_info.delete(0, "end")
     program_info.insert(0, "Ex: BSCS AI - Bachelor of Science in Computer Science")
     program_info.config(fg="gray")
-
+    
     display_students()
 
     saved_label = Label(root, bg="lightgray", width=30, text="Saved Successfully!", fg="green", font=("Arial", 10, "bold"))
@@ -157,13 +151,13 @@ def save_to_csv():
 
 def remove_saved_label(event=None):
     global saved_label
-    if saved_label is not None: 
+    if saved_label is not None:
         saved_label.destroy()
         saved_label = None
 
 def bind_reset_events():
     for widget in [id_no, last_name, first_name, program_info]:
-        widget.bind("<Key>", remove_saved_label) 
+        widget.bind("<Key>", remove_saved_label)
     for dropdown in [gender_dropdown, year_dropdown, college_dropdown]:
         dropdown.bind("<<ComboboxSelected>>", remove_saved_label)
 
@@ -199,18 +193,18 @@ def on_resize(event):
     search_var.set("")
     cancel_butt.pack_forget()
 
-
 def on_add_button_click(event):
     item = side_bar_canvas.find_closest(event.x, event.y)[0]
     if item in [add_button, add_text]:  
         side_bar_canvas.itemconfig(add_button, fill='#2E4D8C')
         side_bar_canvas.itemconfig(add_text, fill='#FFFFFF')
     elif item in [edit_button, edit_text, edit_icon]:  
-        side_bar_canvas.itemconfig(edit_button, fill='#2E4D8C')
+        side_bar_canvas.itemconfig(edit_button, fill='#153E83')
         side_bar_canvas.itemconfig(edit_text, fill='#FFFFFF')
     elif item in [delete_button, delete_text, delete_icon]:  
-        side_bar_canvas.itemconfig(delete_button, fill='#2E4D8C')
+        side_bar_canvas.itemconfig(delete_button, fill='#153E83')
         side_bar_canvas.itemconfig(delete_text, fill='#FFFFFF')
+
     
 def button_release(event):
     side_bar_canvas.itemconfig(add_button, fill='#D7E3F5')  
@@ -261,19 +255,18 @@ def on_leave_edit(event):
 
 def delete_stud(event):
     def trigger_once(event):
-        on_leave_delete(event) 
+        on_leave_delete(event)
         root.unbind("<Motion>")
 
     root.bind("<Motion>", trigger_once)
-    selected_item = tree.selection()  
+    selected_item = tree.selection() 
     if not selected_item:
         messagebox.showwarning("No Selection", "Please select a student to delete.")
         return
 
-    student_data = tree.item(selected_item, "values")  
-    student_id = student_data[0]
+    student_data = tree.item(selected_item, "values") 
+    student_id = student_data[0] 
 
-    # Confirm deletion
     confirm = messagebox.askyesno("Confirm Delete", f"Are you sure you want to delete student ID {student_id}?")
     if not confirm:
         return  
@@ -289,7 +282,7 @@ def delete_stud(event):
             if row and row[0] != student_id:  
                 updated_rows.append(row)
 
-    # Write back update data
+
     with open("students.csv", "w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(header) 
@@ -303,10 +296,10 @@ def delete_stud(event):
 
 
 def edit_stud(event):
-    global frame, is_form_visible
+    global frame, is_form_visible,sorting
 
     def trigger_once(event):
-        on_leave_edit(event) 
+        on_leave_edit(event)
         root.unbind("<Motion>")
     root.bind("<Motion>",trigger_once)
 
@@ -321,14 +314,12 @@ def edit_stud(event):
     if student_data:
         if not is_form_visible:
             side_bar_canvas.configure(bg="lightgray")
-
             frame = Canvas(content_frame, bg="white", width=287, height=430, bd=0, highlightthickness=0)
             frame.grid(row=0, column=0, rowspan=2, columnspan=2, sticky="nw")
 
-            toggle_form()  
-            frame.grid()
+            toggle_form()
 
-    
+
         populate_form(student_data)
 
         style = ttk.Style()
@@ -341,6 +332,7 @@ def edit_stud(event):
         first_name.config(fg="black")
         program_info.config(fg="black")
         text.configure(text="Edit Form")
+
 
         submit_canvas.bind("<ButtonRelease-1>", lambda event: update_student(student_id))
 
@@ -361,7 +353,6 @@ def update_student(old_id):
         program_info.get()
     ]
 
-    #error handling
     errors = []  
 
     id_pattern = r"^\d{4}-\d{4}$"
@@ -392,6 +383,7 @@ def update_student(old_id):
 
         new_data[6] = f"{program_code} - {program_name}" 
 
+
     if "" in new_data[:3]: 
         errors.append("• All fields (ID No., Last Name, First Name) must be filled out.")
 
@@ -415,7 +407,7 @@ def update_student(old_id):
             for row in reader:
                 if row and row[0] == new_data[0] and row[0] != old_id:
                     errors.append(f"• Student ID {new_data[0]} already exists. Please use a different ID.")
-                    break  
+                    break
     except FileNotFoundError:
         errors.append("• Student database (CSV file) not found.")
 
@@ -433,7 +425,7 @@ def update_student(old_id):
     try:
         with open(file_path, "r", newline="") as file:
             reader = csv.reader(file)
-            headers = next(reader) 
+            headers = next(reader)
             for row in reader:
                 if row and row[0] != old_id: 
                     updated_rows.append(row)
@@ -461,26 +453,24 @@ def update_student(old_id):
 
 
 def on_sidebar_resize(event):
-    global add_button, add_text, edit_button, edit_text, delete_button, delete_text, edit_icon_img, delete_icon_img,delete_icon,edit_icon
+    global add_button, add_text, edit_button, edit_text, delete_button, delete_text, edit_icon_img, delete_icon_img,delete_icon,edit_icon,delete_icon_img
     side_bar_canvas.delete("all")
     canvas_width = side_bar_canvas.winfo_width()
     canvas_height = side_bar_canvas.winfo_height()
 
-    create_rounded_rectangle(side_bar_canvas, -200, 0, canvas_width, canvas_height + 50, radius=130, fill="#2363C6")
-
-    # Sizes
+    side_frame = create_rounded_rectangle(side_bar_canvas, -200, 0, canvas_width, canvas_height + 50, radius=130, fill="#2363C6")
+    side_bar_canvas.tag_bind(side_frame,"<ButtonRelease-1>",remove)
     add_width, add_height = 160, 35
     edit_width, edit_height = 160, 25
     delete_width, delete_height = 160, 25
 
-    # Spaces
+
     add_to_edit_spacing = 15
     edit_to_delete_spacing = 2
 
-    offset_x = 0  #move more/less left
-    icon_text_spacing = 5  # Space between icon and text
+    offset_x = 0  
+    icon_text_spacing = 5  
 
-    # Add Student Button (Centered)
     add_x1 = (canvas_width - add_width) // 2
     add_y1 = 35
     add_x2 = add_x1 + add_width
@@ -491,31 +481,30 @@ def on_sidebar_resize(event):
                                            text="Add Student", fill="#2363C6", font=('Albert Sans', 13, 'bold'))
 
     delete_x1 = ((canvas_width - delete_width) // 2) + offset_x
-    delete_y1 = add_y2 + add_to_edit_spacing  
+    delete_y1 = add_y2 + add_to_edit_spacing 
     delete_x2 = delete_x1 + delete_width
     delete_y2 = delete_y1 + delete_height
 
     delete_button = create_rounded_rectangle(side_bar_canvas, delete_x1, delete_y1, delete_x2, delete_y2, radius=20, fill="#2363C6")
 
-    # Delete Icon
-    global delete_icon_img
+
     delete_icon_img = PhotoImage(file="Images/Trash.png")
-    delete_icon_x = delete_x1 + 8  # Left inside button
+    delete_icon_x = delete_x1 + 8  
     delete_icon_y = (delete_y1 + delete_y2) // 2
     delete_icon = side_bar_canvas.create_image(delete_icon_x, delete_icon_y, anchor="w", image=delete_icon_img)
 
     delete_text_x = delete_icon_x + delete_icon_img.width() + icon_text_spacing
-    delete_text = side_bar_canvas.create_text(delete_text_x, delete_icon_y, text="Delete Student", fill="white", font=('Albert Sans', 11, 'normal'), anchor="w")
+    delete_text = side_bar_canvas.create_text(delete_text_x, delete_icon_y, text="Delete Student", fill="white",
+                                              font=('Albert Sans', 11, 'normal'), anchor="w")
 
-    # Edit Student Button 
+
     edit_x1 = ((canvas_width - edit_width) // 2) + offset_x
-    edit_y1 = delete_y2 + edit_to_delete_spacing 
+    edit_y1 = delete_y2 + edit_to_delete_spacing  
     edit_x2 = edit_x1 + edit_width
     edit_y2 = edit_y1 + edit_height
 
     edit_button = create_rounded_rectangle(side_bar_canvas, edit_x1, edit_y1, edit_x2, edit_y2, radius=20, fill="#2363C6")
 
-    # Edit Icon
     global edit_icon_img
     edit_icon_img = PhotoImage(file="Images/edit.png")
     icon_x = edit_x1 + 10  # Left inside button
@@ -523,10 +512,10 @@ def on_sidebar_resize(event):
     edit_icon = side_bar_canvas.create_image(icon_x, icon_y, anchor="w", image=edit_icon_img)
 
     text_x = icon_x + edit_icon_img.width() + icon_text_spacing
-    edit_text = side_bar_canvas.create_text(text_x, icon_y, text="Edit Student", fill="white", font=('Albert Sans', 11, 'normal'), anchor="w")
+    edit_text = side_bar_canvas.create_text(text_x, icon_y, text="Edit Student", fill="white",
+                                            font=('Albert Sans', 11, 'normal'), anchor="w")
 
-
-    #add button bind
+    #add button
     side_bar_canvas.tag_bind(add_button, "<Enter>", on_hover)
     side_bar_canvas.tag_bind(add_button, "<Leave>", on_leave)
     side_bar_canvas.tag_bind(add_button, "<Button-1>", on_add_button_click)
@@ -537,7 +526,7 @@ def on_sidebar_resize(event):
     side_bar_canvas.tag_bind(add_text, "<Button-1>", on_add_button_click)
     side_bar_canvas.tag_bind(add_text, "<ButtonRelease-1>", button_release)
 
-    #edit button bind
+    #edit button
     side_bar_canvas.tag_bind(edit_button, "<Leave>", on_leave_edit)
     side_bar_canvas.tag_bind(edit_button, "<Button-1>", on_add_button_click)
     side_bar_canvas.tag_bind(edit_button, "<ButtonRelease-1>", edit_stud)
@@ -545,12 +534,11 @@ def on_sidebar_resize(event):
     side_bar_canvas.tag_bind(edit_icon, "<Enter>", on_leave_edit)
     side_bar_canvas.tag_bind(edit_icon, "<ButtonRelease-1>", edit_stud)
 
-
     side_bar_canvas.tag_bind(edit_text, "<Enter>", on_hover_edit)
     side_bar_canvas.tag_bind(edit_text, "<Button-1>", on_add_button_click)
     side_bar_canvas.tag_bind(edit_text, "<ButtonRelease-1>", edit_stud)
 
-    #delete button bind
+    #delete button
     side_bar_canvas.tag_bind(delete_button, "<Leave>", on_leave_delete)
     side_bar_canvas.tag_bind(delete_button, "<Button-1>", on_add_button_click)
     side_bar_canvas.tag_bind(delete_button, "<ButtonRelease-1>", delete_stud)
@@ -569,7 +557,7 @@ def delete_entry():
     cancel_butt.pack_forget()
 
 def on_input_change(*args):
-    if search_var.get(): 
+    if search_var.get():
         cancel_butt.lift()
         cancel_butt.pack(side="right",padx=2)
 
@@ -588,10 +576,8 @@ def remove_focus(event):
     global sorting
     widget = event.widget
 
-    # Ignore clicks on UI elements (so selection & form stay when clicking buttons, entries, etc.)
     if isinstance(widget, (Entry, Button, ttk.Combobox, ttk.Treeview, Label, Canvas)):
-        return  # Do nothing if clicking a UI element
-
+        return
 
     tree.selection_remove(tree.selection())
 
@@ -601,14 +587,13 @@ def remove_focus(event):
     
 
 def toggle_selection(event):
-    clicked_item = tree.identify_row(event.y) 
-    selected_item = tree.selection() 
+    clicked_item = tree.identify_row(event.y)
+    selected_item = tree.selection()
 
     if clicked_item in selected_item:
         tree.selection_remove(clicked_item)
     else:
         tree.selection_set(clicked_item)
-
 
 
 def on_root_resize(event):
@@ -623,7 +608,6 @@ def on_root_resize(event):
 root = Tk()
 root.geometry("1100x605")
 root.minsize(510, 200)
-root.title(" ")
 root.configure(bg="white")
 root.rowconfigure(1, weight=1)
 root.columnconfigure(0,minsize=220)
@@ -632,31 +616,6 @@ root.columnconfigure(1,weight=1)
 
 
 #header
-
-def filter_students():
-    global students
-    query = search_var.get().strip().lower().replace(",", "").replace("  ", " ")
-
-    for item in tree.get_children():
-        tree.delete(item)
-
-    for student in students:
-        student_values = [str(value).lower().replace(",", "").replace("  ", " ") for value in student if value]
-
-        original_name = student[1].lower().replace(",", "").strip()  # "Doe John"
-        reversed_name = " ".join(reversed(student[1].split(","))).strip().lower()  # "John Doe"
-
-        if any(query in value for value in student_values) or query in original_name or query in reversed_name:
-            tree.insert("", "end", values=student)
-
-def on_input_change(*args):
-    if search_var.get(): 
-        cancel_butt.lift()
-        cancel_butt.pack(side="right", padx=2)
-    else:
-        cancel_butt.pack_forget()
-    filter_students()
-
 header = Frame(root, bg="white",height=50)
 header.grid(row=0, column=0, sticky="nsew",columnspan=2)
 header.rowconfigure(0, weight=0)
@@ -667,9 +626,33 @@ header.grid_propagate(False)
 text_stud = Label(header, text="Student Information", font=('Albert Sans', 15, 'bold'), bg='white')
 text_stud.grid(row=0, column=0, padx=20)
 
+def filter_students():
+    global students 
+
+    query = search_var.get().strip().lower().replace(",", "").replace("  ", " ")
+
+    tree.delete(*tree.get_children())
+
+    for student in students:
+
+        student_values = [str(value).lower().replace(",", "").strip() for value in student]
+
+        original_name = student[1].lower().replace(",", "").strip()
+        reversed_name = " ".join(reversed(student[1].split(","))).strip().lower()
+
+        if any(query in value for value in student_values) or query in original_name or query in reversed_name:
+            tree.insert("", "end", values=student)
 
 
-# search bar
+def on_input_change(*args):
+    if search_var.get():
+        cancel_butt.lift()
+        cancel_butt.pack(side="right", padx=2)
+    else:
+        cancel_butt.pack_forget()
+    filter_students()
+
+
 search_var = StringVar()
 search_var.trace_add("write", on_input_change)
 search_frame = Canvas(header, bg="white", height=40, bd=0, highlightthickness=0)
@@ -715,16 +698,14 @@ content_frame.grid_columnconfigure(0, weight=1)
 student_text = Label(content_frame, background="white", text="STUDENTS", font=("AlbertSans", 20, "bold"))
 student_text.grid(row=0, column=0, sticky="nw", pady=15, padx=20)
 
-
-is_form_visible = False 
-rounded_rectangle_id = None 
+is_form_visible = False  
+rounded_rectangle_id = None
 form_widgets = []
 
 #form
 
 def on_select(event):
     event.widget.configure(foreground="black")
-
 def toggle_form():
     global sorting,is_form_visible,text, round, form_widgets,last_name,first_name,gender_dropdown,id_no,year_dropdown,college_dropdown,program_info,submit_canvas
 
@@ -742,8 +723,9 @@ def toggle_form():
         style.configure("Custom.TCombobox", foreground="") 
         style.configure("Custom.TCombobox",relief="flat",foreground="gray")
 
-        round = create_rounded_rectangle(frame, -300, 0, 287, 430, radius=130,fill='lightgray')
-        form_widgets.append(round)  # Store rectangle ID
+        form_frame = round = create_rounded_rectangle(frame, -300, 0, 287, 430, radius=130,fill='lightgray')
+        form_widgets.append(round)
+        frame.tag_bind(form_frame,"<Button-1>",remove)
 
         text = Label(root,text="Student Form", font=("Arial", 20, "bold"), bg="lightgray",fg="#2363C6")
         frame.create_window(130,30,window=text)
@@ -818,7 +800,6 @@ def toggle_form():
         college_dropdown = ttk.Combobox(root,style="Custom.TCombobox",values=college_names, state="readonly", width=38)
         frame.create_window(140,238,window=college_dropdown)
         form_widgets.append(college_dropdown)
-
         college_dropdown.set("Select") 
         college_dropdown.bind("<<ComboboxSelected>>",on_select)
 
@@ -843,35 +824,34 @@ def toggle_form():
 
 
         def submit_click(event):
-            submit_canvas.itemconfig(submit, fill='#2E4D8C')
+            submit_canvas.itemconfig(submit, fill='#153E83')
         def submit_release(event):
             submit_canvas.itemconfig(submit, fill='#2363C6')
             save_to_csv()
             
         def submit_hover(event):
-            submit_canvas.itemconfig(submit, fill='#154BA6')  # Slightly different hover color
+            submit_canvas.itemconfig(submit, fill='#154BA6') 
             submit_canvas.config(cursor="hand2")
         def on_submit_leave(event):
-            submit_canvas.itemconfig(submit, fill='#2363C6')  # Restore original color
+            submit_canvas.itemconfig(submit, fill='#2363C6')
             submit_canvas.config(cursor="")
 
 
         def close_click(event):
             close_canvas.itemconfig(close, fill='#872D2D')
-              # Darker red on click
 
         def close_release(event):
-            close_canvas.itemconfig(close, fill='#AA4141')  # Restore original color
+            close_canvas.itemconfig(close, fill='#AA4141') 
             if 'saved_label' in globals() and saved_label is not None:
                 remove_saved_label()
             restore_content()
 
         def close_hover(event):
-            close_canvas.itemconfig(close, fill='#9B3535')  # Slightly different hover color
+            close_canvas.itemconfig(close, fill='#9B3535') 
             close_canvas.config(cursor="hand2")
 
         def close_leave(event):
-            close_canvas.itemconfig(close, fill='#AA4141')  # Restore original color
+            close_canvas.itemconfig(close, fill='#AA4141')
             close_canvas.config(cursor="")
 
 
@@ -898,9 +878,9 @@ def toggle_form():
         close_canvas.bind("<ButtonRelease-1>", close_release)
         close_canvas.bind("<Enter>", close_hover)
         close_canvas.bind("<Leave>", close_leave)
+
 def restore_content(event=None):
     global is_form_visible, form_widgets
-    frame.grid_forget()
     if is_form_visible:
         for widget in form_widgets:
             if isinstance(widget, int):  
@@ -908,7 +888,7 @@ def restore_content(event=None):
                     frame.delete(widget)  
             else: 
                 widget.destroy()  
-
+        frame.grid_forget()
         form_widgets.clear()
         is_form_visible = False  
 
@@ -929,6 +909,11 @@ def load_students():
                     program = row[6].split(" - ")[0] 
                     students.append([row[0], full_name, gender, year_level, college, program])
     return students
+
+
+
+
+
 def display_students():
     global tree,students
     students = load_students()
@@ -955,16 +940,11 @@ def display_students():
             elif col == "Program":
                 tree.column(col, anchor="w", width=150)
             
-            
         
-        for student in students:
-            tree.insert("", "end", values=student)
         
         tree.grid(row=0, column=0, sticky="nsew", pady=(70, 0), padx=(20, 0))
-
         
         style = ttk.Style()
-
         style.configure("Treeview", font=('Albert Sans', 12), rowheight=40, padding=(5, 5), highlightthickness=0, borderwidth=0)
         style.configure("Treeview.Heading", font=('Albert Sans', 15, 'bold'), anchor="w", padding=(1, 8), foreground="#9F9EA1", relief="flat", borderwidth=0)
         style.layout("Treeview", [('Treeview.treearea', {'sticky': 'nswe'})])
@@ -974,19 +954,23 @@ def display_students():
         tree.configure(yscrollcommand=scrollbar.set)
         scrollbar.place(relx=1.0, rely=0.14, relheight=0.85, anchor="ne")
 
-        # Disable column dragging
+
         def disable_column_drag(event):
             region = tree.identify_region(event.x, event.y)
-            if region == "separator" or region == "heading":  # Prevents resizing and dragging
+            if region == "separator" or region == "heading": 
                 return "break"
-
-        for col in columns:
-            tree.heading(col, text=col, anchor="w")
-            tree.heading(col, command=lambda _col=col: None)
 
         tree.bind('<Button-1>', disable_column_drag, add='+')
         tree.bind('<B1-Motion>', disable_column_drag, add='+')
+
         display_students.initialized = True  
+
+
+    for row in tree.get_children():
+        tree.delete(row)
+    for student in students:
+        tree.insert("", "end", values=student)
+ 
 
     tree.delete(*tree.get_children())
 
@@ -1016,40 +1000,186 @@ def display_students():
                 tree.after(1, lambda: tree.selection_set(clicked_item)) 
     tree.bind("<Button-1>", toggle_selection)
 
+
+def remove(event):
+    root.focus_set()
+
 def sort_click(event):
     sort_canvas.itemconfig(sort_frame, fill="light gray")
 
+
+
+sort_order = True
+
+def sort_id():
+    global tree, sort_order
+
+    sort_order = not sort_order  
+    id_reverse = not sort_order  
+
+    def parse_id(id_str):
+
+        try:
+            year, number = map(int, id_str.split("-")) 
+            return (year, number)
+        except ValueError:
+            return (float('inf'), float('inf')) 
+    displayed_students = []
+    for item in tree.get_children():
+        displayed_students.append(tree.item(item, "values")) 
+    displayed_students.sort(key=lambda x: parse_id(x[0]), reverse=id_reverse)
+
+
+    for item in tree.get_children():
+        tree.delete(item)
+
+    for student in displayed_students:
+        tree.insert("", "end", values=student)
+
+    if id_reverse:
+        id_text.configure(text="Descending")
+    else:
+        id_text.configure(text="Ascending")
+
+    print(f"Sorted displayed students by ID ({'Descending' if id_reverse else 'Ascending'})")
+
+def sort_name(event=None):
+    global tree, sort_order
+
+    sort_order = not sort_order  
+    name_reverse = not sort_order  
+
+    displayed_students = []
+    for item in tree.get_children():
+        displayed_students.append(tree.item(item, "values"))
+    displayed_students.sort(key=lambda x: x[1].strip().lower(), reverse=name_reverse)
+
+
+    for item in tree.get_children():
+        tree.delete(item)
+
+    for student in displayed_students:
+        tree.insert("", "end", values=student)
+
+    if name_reverse:
+        sort_text.configure(text="Descending")
+    else:
+        sort_text.configure(text="Ascending")
+
+
+
 def sort_click_release(event):
-    global sorting
+    global sorting,sort_text,id_text
 
     if sorting:
-        sorting.destroy()  # Remove sorting menu
+        sorting.destroy() 
         sorting = None
 
 
-        sort_canvas.itemconfig(sort_frame, fill="white")  # Reset button color
+        sort_canvas.itemconfig(sort_frame, fill="white") 
     else:
-        # Create sorting menu
+        if is_form_visible:
+            restore_content()
         style = ttk.Style()
         style.configure("Custom.TCombobox", foreground="") 
         style.configure("Custom.TCombobox",relief="flat",foreground="gray")
+
+        
+     
+
+
+        def on_click(event):
+            widget = event.widget  # Get the widget that was clicked
+
+            if widget in [sort_text, name_sort_bg]:  
+                name_sort_bg.itemconfig(sort_butt, fill='#153E83')
+                sort_text.configure(bg="#153E83", fg="white")
+
+            elif widget in [id_text, id_sort_bg]:  
+                id_sort_bg.itemconfig(id_butt, fill='#153E83')
+                id_text.configure(bg="#153E83", fg="white")
+        
+        def id_release(event):
+            sort_id()
+        def name_release(event):
+            sort_name()
+
+        def name_sort_hover(event):
+            name_sort_bg.itemconfig(sort_butt, fill='#A5CAEC')
+            sort_text.config(bg='#A5CAEC', fg='#154BA6')  
+            name_sort_bg.config(cursor="hand2")
+            sort_text.configure(cursor="hand2")
+
+        def name_sort_leave(event):
+            name_sort_bg.itemconfig(sort_butt, fill='#2363C6') 
+            sort_text.config(bg='#2363C6', fg='white') 
+            name_sort_bg.config(cursor="")
+
+        def id_sort_hover(event):
+            id_sort_bg.itemconfig(id_butt, fill='#A5CAEC')
+            id_text.config(bg='#A5CAEC', fg='#154BA6')  
+            id_sort_bg.config(cursor="hand2")
+            id_text.configure(cursor="hand2")
+
+        def id_sort_leave(event):
+            id_sort_bg.itemconfig(id_butt, fill='#2363C6') 
+            id_text.config(bg='#2363C6', fg='white') 
+            name_sort_bg.config(cursor="")
 
         sorting = Canvas(content_frame, width=100, height=150, bg="white", highlightthickness=0)
         sorting_frame = create_rounded_rectangle(sorting, 0, 0, 100, 150, radius=20, fill="light gray") 
         sorting.grid(row=0, column=0, sticky="ne", padx=(0, 70))
 
-        sort_text = Label(root,text="Sort By:", font=("Arial", 10, "bold"), bg="light gray",fg="black")
-        sorting.create_window(30,15,window=sort_text)
+        sorting.tag_bind(sorting_frame, "<Button-1>", remove)
 
-        name_sort = ttk.Combobox(root,style="Custom.TCombobox",values=["Ascending", "Descending"], state="readonly", width=10)
-        sorting.create_window(45,40,window=name_sort)
-        name_sort.set("Name") 
-        name_sort.bind("<<CoboxboxSelected>>",on_select)
 
-        id_sort = ttk.Combobox(root,style="Custom.TCombobox",values=["Ascending", "Descending"], state="readonly", width=10)
-        sorting.create_window(45,70,window=id_sort)
-        id_sort.set("ID No.") 
-        id_sort.bind("<<CoboxboxSelected>>",on_select)
+        sort_by = Label(root,text="Sort By:", font=("Arial", 10, "bold"), bg="light gray",fg="#2363C6")
+        sorting.create_window(30,15,window=sort_by)
+
+
+
+
+        name_sort = Label(root,text="Name", font=("Arial", 10, "bold"), bg="light gray",fg="black")
+        sorting.create_window(25,40,window=name_sort)
+
+        name_sort_bg = Canvas(root,bg="lightgray",width=80,height=22,bd=0,highlightthickness=0)
+        sorting.create_window(45,65,window=name_sort_bg)
+
+        sort_butt = create_rounded_rectangle(name_sort_bg, 0, 0, 80, 22, radius=20, fill="#2363C6") 
+        sort_text = Label(root,text="Ascending", font=("Albert Sans", 8, "bold"), bg="#2363C6",fg="white")
+        sorting.create_window(45,65,window=sort_text)
+
+
+        name_sort_bg.bind("<Button-1>",on_click)
+        name_sort_bg.bind("<ButtonRelease-1>",name_release)
+        sort_text.bind("<Button-1>",on_click)
+        sort_text.bind("<ButtonRelease-1>",name_release)
+
+        name_sort_bg.bind("<Enter>",name_sort_hover)
+        name_sort_bg.bind("<Leave>",name_sort_leave)
+        sort_text.bind("<Enter>",name_sort_hover)
+        sort_text.bind("<Leave>",name_sort_leave)
+
+        id_sort = Label(root,text="ID No.", font=("Arial", 10, "bold"), bg="light gray",fg="black")
+        sorting.create_window(25,90,window=id_sort)
+
+        id_sort_bg = Canvas(root,bg="lightgray",width=80,height=22,bd=0,highlightthickness=0)
+        sorting.create_window(45,115,window=id_sort_bg)
+
+        id_butt = create_rounded_rectangle(id_sort_bg, 0, 0, 80, 22, radius=20, fill="#2363C6") 
+        id_text = Label(root,text="Ascending", font=("Albert Sans", 8, "bold"), bg="#2363C6",fg="white")
+        sorting.create_window(45,115,window=id_text)
+
+        id_sort_bg.bind("<Button-1>",on_click)
+        id_sort_bg.bind("<ButtonRelease-1>",id_release)
+        id_text.bind("<Button-1>",on_click)
+        id_text.bind("<ButtonRelease-1>",id_release)
+
+        id_sort_bg.bind("<Enter>",id_sort_hover)
+        id_sort_bg.bind("<Leave>",id_sort_leave)
+        id_text.bind("<Enter>",id_sort_hover)
+        id_text.bind("<Leave>",id_sort_leave)
+
 
 
 sorting = None
@@ -1057,10 +1187,15 @@ sort_canvas = Canvas(header,width=40,height=40,highlightthickness=0,bd=0,bg="whi
 sort_canvas.grid(row=0,column=1,padx=(0,70),pady=0,sticky="e")
 sort_frame = create_rounded_rectangle(sort_canvas, 4, 7, 35, 35, radius=20, fill="white") 
 sort = PhotoImage(file="Images/sort.png")
-sort_canvas.create_image(20, 20, image=sort, anchor="center")  # Centered in the button
+sort_canvas.create_image(20, 20, image=sort, anchor="center") 
 
 sort_canvas.bind("<Button-1>",sort_click)
 sort_canvas.bind("<ButtonRelease-1>",sort_click_release)
+
+
+
+
+
 
 display_students()
 root.bind("<Configure>",on_root_resize)
