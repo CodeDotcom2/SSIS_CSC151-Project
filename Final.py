@@ -298,6 +298,7 @@ def delete_stud(event):
     
 
     display_students()
+    restore_content()
     messagebox.showinfo("Success", f"Student ID {student_id} has been deleted!")
 
 
@@ -710,8 +711,8 @@ student_text = Label(content_frame, background="white", text="STUDENTS", font=("
 student_text.grid(row=0, column=0, sticky="nw", pady=15, padx=20)
 
 
-is_form_visible = False  # Initially hidden
-rounded_rectangle_id = None  # Store rectangle ID
+is_form_visible = False 
+rounded_rectangle_id = None 
 form_widgets = []
 
 #form
