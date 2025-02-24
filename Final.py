@@ -580,7 +580,6 @@ def remove_focus(event):
         return
 
     tree.selection_remove(tree.selection())
-
     cancel_butt.pack_forget()
     search_var.set("")
     root.focus_set()
@@ -1082,10 +1081,6 @@ def sort_click_release(event):
         style = ttk.Style()
         style.configure("Custom.TCombobox", foreground="") 
         style.configure("Custom.TCombobox",relief="flat",foreground="gray")
-
-        
-     
-
 
         def on_click(event):
             widget = event.widget  # Get the widget that was clicked
