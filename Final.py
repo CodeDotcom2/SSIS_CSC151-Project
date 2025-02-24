@@ -598,10 +598,7 @@ def remove_focus(event):
     cancel_butt.pack_forget()
     search_var.set("")
     root.focus_set()
-    if sorting:
-        sorting.destroy()
-        sorting=None
-        sort_canvas.itemconfig(sort_frame, fill="white")
+    
 
 def toggle_selection(event):
     clicked_item = tree.identify_row(event.y) 
