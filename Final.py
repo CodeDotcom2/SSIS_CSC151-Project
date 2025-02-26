@@ -781,40 +781,65 @@ def toggle_form():
             "BSCS - Bachelor of Science in Computer Science",
             "BSIT - Bachelor of Science in Information Technology",
             "BSIS - Bachelor of Science in Information Systems",
-            "BSDS - Bachelor of Science in Data Science"
+            "BSCA - Bachelor of Science in Computer Application"
         ],
         "COET - College of Engineering and Technology": [
-            "BSEE - Bachelor of Science in Electrical Engineering",
-            "BSECE - Bachelor of Science in Electronics and Communications Engineering",
-            "BSCE - Bachelor of Science in Civil Engineering",
-            "BSME - Bachelor of Science in Mechanical Engineering"
+            "DCET – Diploma in Chemical Engineering Technology",
+            "BSCerE – Bachelor of Science in Ceramic Engineering",
+            "BSCE – Bachelor of Science in Civil Engineering",
+            "BSEE – Bachelor of Science in Electrical Engineering",
+            "BSME – Bachelor of Science in Mechanical Engineering",
+            "BSChE – Bachelor of Science in Chemical Engineering",
+            "BSMetE – Bachelor of Science in Metallurgical Engineering",
+            "BSCpE – Bachelor of Science in Computer Engineering",
+            "BSMinE – Bachelor of Science in Mining Engineering",
+            "BSECE – Bachelor of Science in Electronics & Communications Engineering",
+            "BSEnET – Bachelor of Science in Environmental Engineering"
+
         ],
         "CSM - College of Science and Mathematics": [
-            "BSMath - Bachelor of Science in Mathematics",
-            "BSChem - Bachelor of Science in Chemistry",
-            "BSP - Bachelor of Science in Physics",
-            "BSES - Bachelor of Science in Environmental Science"
+            "BSBio Bot – Bachelor of Science in Biology (Botany)",
+            "BSChem – Bachelor of Science in Chemistry",
+            "BSMath – Bachelor of Science in Mathematics",
+            "BSPhys – Bachelor of Science in Physics",
+            "BSBio Zoo – Bachelor of Science in Biology (Zoology)",
+            "BSBio Mar – Bachelor of Science in Biology (Marine)",
+            "BSBio Gen – Bachelor of Science in Biology (General)",
+            "BSStat – Bachelor of Science in Statistics"
         ],
         "CED - College of Education": [
-            "BSEd English - Bachelor of Secondary Education Major in English",
-            "BSEd Math - Bachelor of Secondary Education Major in Mathematics",
-            "BSEd Sci - Bachelor of Secondary Education Major in Science"
+            "BEEd SciMath – Bachelor of Elementary Education (Science and Mathematics)",
+            "BEEd Lang – Bachelor of Elementary Education (Language Education)",
+            "BSEd Bio – Bachelor of Secondary Education (Biology)",
+            "BSEd Chem – Bachelor of Secondary Education (Chemistry)",
+            "BSEd Phys – Bachelor of Secondary Education (Physics)",
+            "BSEd Math – Bachelor of Secondary Education (Mathematics)",
+            "BPEd – Bachelor of Physical Education",
+            "BTLED HE – Bachelor of Technology and Livelihood Education (Home Economics)",
+            "BTLed IA – Bachelor of Technology and Livelihood Education (Industrial Arts)",
+            "BTVTED DT – Bachelor of Technical-Vocational Teacher Education (Drafting Technology)"
         ],
         "CASS - College of Arts and Social Sciences": [
-            "ABComm - Bachelor of Arts in Communication",
-            "ABPsych - Bachelor of Arts in Psychology",
-            "ABLit - Bachelor of Arts in Literature"
+            "BA ELS – Bachelor of Arts in English Language Studies",
+            "BA LCS – Bachelor of Arts in Literary and Cultural Studies",
+            "BA FIL – Bachelor of Arts in Filipino",
+            "BA PAN – Bachelor of Arts in Panitikan",
+            "BA POLSCI – Bachelor of Arts in Political Science",
+            "BA PSY – Bachelor of Arts in Psychology",
+            "BA SOC – Bachelor of Arts in Sociology",
+            "BA HIS IH – Bachelor of Arts in History (International History Track)",
+            "BS PHIL AE – Bachelor of Science in Philosophy",
+            "BS PSY – Bachelor of Science in Psychology"
         ],
         "CEBA - College of Economics Business and Accountancy": [
-            "BSBA - Bachelor of Science in Business Administration",
-            "BSBA FM - Bachelor of Science in Business Administration Major in Financial Management",
-            "BSMA - Bachelor of Science in Management Accounting"
+            "BS ACC – Bachelor of Science in Accountancy",
+            "BSBA BE – Bachelor of Science in Business Administration (Business Economics)",
+            "BSBA MM – Bachelor of Science in Business Administration (Marketing Management)",
+            "BS ENT – Bachelor of Science in Entrepreneurship",
+            "BSHM – Bachelor of Science in Hospitality Management"
         ],
         "CHS - College of Health Sciences": [
             "BSN - Bachelor of Science in Nursing",
-            "BSMT - Bachelor of Science in Medical Technology",
-            "BSPharma - Bachelor of Science in Pharmacy",
-            "BSRadTech - Bachelor of Science in Radiologic Technology"
             ]
         }
 
@@ -1065,7 +1090,6 @@ def sort_id():
     else:
         id_text.configure(text="Ascending")
 
-    print(f"Sorted displayed students by ID ({'Descending' if id_reverse else 'Ascending'})")
 
 def sort_name(event=None):
     global tree, sort_order
