@@ -1,40 +1,37 @@
 ID No.,Last Name,First Name,Gender,Year Level,College,Program
-2025-4821,Ramirez,Nathaniel James,Male,2nd,CCS - College of Computer Studies,BSIT - Bachelor of Science in Information Technology
-2023-9317,Santos,Isabella,Female,1st,COET - College of Engineering and Technology,BSCE - Bachelor of Science in Civil Engineering
-2021-5274,Mendoza,Jacob,Male,3rd,COET - College of Engineering and Technology,BSCpE - Bachelor of Science in Computer Engineering
-2024-6482,Gonzales,Maria Angela,Female,2nd,COET - College of Engineering and Technology,BSME - Bachelor of Science in Mechanical Engineering
-2022-3579,Cruz,Lucas,Male,4th,COET - College of Engineering and Technology,BSChE - Bachelor of Science in Chemical Engineering
-2020-1043,Reyes,Andrea,Female,1st,CSM - College of Science and Mathematics,BSMath - Bachelor of Science in Mathematics
-2025-8492,Villanueva,Gabriel,Male,2nd,CSM - College of Science and Mathematics,BSStat - Bachelor of Science in Statistics
-2023-6427,Fernandez,Christine,Female,3rd,CSM - College of Science and Mathematics,BSBio-Gen - Bachelor of Science in Biology (General)
-2021-1983,Del Rosario,Joshua,Male,1st,CCS - College of Computer Studies,BSCS - Bachelor of Science in Computer Science
+2021-1983,Dale,Is Bayot,Others,2nd,CSM - College of Science and Mathematics,BSMath - Bachelor of Science in Mathematics
+2023-6427,Fernandez,Christine,Female,3rd,CSM - College of Science and Mathematics,BSChem - Bachelor of Science in Chemistry
+2024-6482,Gonzales,Maria Angela,Female,2nd,COET - College of Engineering and Technology,BSCE - Bachelor of Science in Civil Engineering
+2021-5274,Mendoza,Jacob,Male,3rd,COET - College of Engineering and Technology,BSCerE - Bachelor of Science in Ceramic Engineering
 2024-7253,Tan,Samantha,Female,2nd,CCS - College of Computer Studies,BSIS - Bachelor of Science in Information Systems
-2022-3749,Perez,Matthew,Male,3rd,CCS - College of Computer Studies,BSIT - Bachelor of Science in Information Technology
-2025-8152,Rodriguez,Julia,Female,4th,CED - College of Education,BSEd-Math - Bachelor of Secondary Education (Mathematics)
 2023-2564,Morales,Daniel,Male,1st,CED - College of Education,BPEd - Bachelor of Physical Education
 2020-6871,Bautista,Katrina,Female,2nd,CED - College of Education,BEEd-Lang - Bachelor of Elementary Education (Language Education)
-2021-4128,Gutierrez,Samuel,Male,3rd,CAS - College of Arts and Social Sciences,BA-POLSCI - Bachelor of Arts in Political Science
-2024-9375,Lopez,Alyssa,Female,4th,CAS - College of Arts and Social Sciences,BA-PSY - Bachelor of Arts in Psychology
-2022-5182,Castro,Ethan,Male,1st,CEBA - College of Economics, Business & Accountancy,BS-ACC - Bachelor of Science in Accountancy
-2023-2643,Salazar,Nicole,Female,2nd,CEBA - College of Economics, Business & Accountancy,BSBA-MM - Bachelor of Science in Business Administration (Marketing Management)
 2025-1759,Mercado,John Rey,Male,3rd,CHS - College of Health Services,BSN - Bachelor of Science in Nursing
 2021-9231,Dela Cruz,Jessica,Female,1st,COET - College of Engineering and Technology,BSMinE - Bachelor of Science in Mining Engineering
 2024-7815,Vega,Christian,Male,2nd,COET - College of Engineering and Technology,BSEE - Bachelor of Science in Electrical Engineering
 2022-6042,Molina,Patricia,Female,3rd,COET - College of Engineering and Technology,BSMetE - Bachelor of Science in Metallurgical Engineering
-2020-5437,Yu,Anthony,Male,4th,COET - College of Engineering and Technology,BSECE - Bachelor of Science in Electronics & Communications Engineering
 2023-3251,Ortiz,Angela,Female,1st,CSM - College of Science and Mathematics,BSPhys - Bachelor of Science in Physics
-2025-7594,Bernardo,Marco,Male,2nd,CSM - College of Science and Mathematics,BSBio-Bot - Bachelor of Science in Biology (Botany)
 2021-8726,Alvarez,Karen,Female,3rd,CSM - College of Science and Mathematics,BSChem - Bachelor of Science in Chemistry
-2024-2954,Gallardo,Daniel,Male,4th,CCS - College of Computer Studies,BSCA - Bachelor of Science in Computer Application
 2022-6318,Navarro,Melissa,Female,1st,CED - College of Education,BSEd-Bio - Bachelor of Secondary Education (Biology)
 2020-5839,Flores,Jonathan,Male,2nd,CED - College of Education,BTVTED DT - Bachelor of Technical-Vocational Teacher Education (Drafting Technology)
 2023-8476,Dominic,Alex,Male,3rd,CED - College of Education,BTLED HE - Bachelor of Technology and Livelihood Education (Home Economics)
-2025-3291,Martinez,Charlene,Female,1st,CAS - College of Arts and Social Sciences,BA-FIL - Bachelor of Arts in Filipino
-2021-6254,Valdez,Kevin,Male,4th,CAS - College of Arts and Social Sciences,BA-SOC - Bachelor of Arts in Sociology
-2024-7428,Luna,Michelle,Female,2nd,CAS - College of Arts and Social Sciences,BA-HIS-IH - Bachelor of Arts in History (International History Track)
-2022-5193,Carpio,Brian,Male,3rd,CEBA - College of Economics, Business & Accountancy,BSBA-BE - Bachelor of Science in Business Administration (Business Economics)
-2023-6715,Hernandez,Sophia,Female,1st,CEBA - College of Economics, Business & Accountancy,BS-ENT - Bachelor of Science in Entrepreneurship
-2025-4786,De Leon,John Paul,Male,4th,CEBA - College of Economics, Business & Accountancy,BSHM - Bachelor of Science in Hotel Management
-2021-3497,Manalo,Kate,Female,2nd,CHS - College of Health Services,BSN - Bachelor of Science in Nursing
 2024-9682,Garcia,Andrei,Male,3rd,COET - College of Engineering and Technology,BSCerE - Bachelor of Science in Ceramic Engineering
-2022-8157,Diaz,Lorraine,Female,1st,COET - College of Engineering and Technology,BSEnET - Bachelor of Science in Environmental Engineering
+2023-1269,Female,Mae,Male,2nd,CCS - College of Computer Studies,BSIT - Bachelor of Science in Information Technology
+2025-4821,Ramirez,Nathaniel James,Male,2nd,CCS - College of Computer Studies,BSCS - Bachelor of Science in Computer Science
+2021-3497,Manalo,Kate,Female,2nd,CHS - College of Health Sciences,BSN - Bachelor of Science in Nursing
+2359-7893,Dale,Gay Shit,Male,2nd,CCS - College of Computer Studies,BSIT - Bachelor of Science in Information Technology
+2021-6254,Dale,Bayot,Female,2nd,CSM - College of Science and Mathematics,BSMath - Bachelor of Science in Mathematics
+2025-7594,Bernardo,Marco,Male,2nd,CSM - College of Science and Mathematics,BSBio Bot - Bachelor of Science in Biology (Botany)
+4569-8977,Bolando Super,Bayot Kaayo,Others,4th,COET - College of Engineering and Technology,BSEE - Bachelor of Science in Electrical Engineering
+2021-4128,Gutierrez,Samuel,Male,3rd,CASS - College of Arts and Social Sciences,BA POLSCI - Bachelor of Arts in Political Science
+2024-7428,Luna,Michelle,Female,2nd,CASS - College of Arts and Social Sciences,BA HIS IH - Bachelor of Arts in History (International History Track)
+2025-3291,Martinez,Charlene,Female,1st,CASS - College of Arts and Social Sciences,BA FIL - Bachelor of Arts in Filipino
+2022-5182,Castro,Ethan,Male,1st,CEBA - College of Economics Business and Accountancy,BS ACC - Bachelor of Science in Accountancy
+2023-6715,Hernandez,Sophia,Female,1st,CEBA - College of Economics Business and Accountancy,BS ACC - Bachelor of Science in Accountancy
+2022-8157,Diaz,Lorraine,Female,1st,COET - College of Engineering and Technology,BSCE - Bachelor of Science in Civil Engineering
+2025-8492,Dale,Gabriel,Male,2nd,CSM - College of Science and Mathematics,BSChem - Bachelor of Science in Chemistry
+2023-2643,Salazar,Nicole,Female,2nd,CEBA - College of Economics Business and Accountancy,BS ACC - Bachelor of Science in Accountancy
+2025-1587,Enario,Sheldon,Male,2nd,CEBA - College of Economics Business and Accountancy,BSHM - Bachelor of Science in Hospitality Management
+2022-5193,Carpio,Brian,Male,3rd,CEBA - College of Economics Business and Accountancy,BS ACC - Bachelor of Science in Accountancy
+2022-3749,Perez,Matthew,Male,3rd,CASS - College of Arts and Social Sciences,BA POLSCI - Bachelor of Arts in Political Science
+1234-5258,Dale,Is Gay,Male,2nd,CEBA - College of Economics Business and Accountancy,BS ACC - Bachelor of Science in Accountancy

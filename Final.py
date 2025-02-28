@@ -90,6 +90,7 @@ def save_to_csv(update_mode=False, old_id=None):
 
     file_exists = os.path.exists(file_path)
     updated_rows = []
+    existing_student = None
 
     if file_exists:
         with open(file_path, "r", newline="", encoding="utf-8") as file:
@@ -97,24 +98,21 @@ def save_to_csv(update_mode=False, old_id=None):
             headers = next(reader)
 
             for row in reader:
-                if update_mode and row[0] == old_id:
+                if row and row[0] == student_id:
+                    existing_student = row
                     continue  
                 updated_rows.append(row)
 
-    if update_mode:
-        updated_rows.append(student_data)
-    else:
-        existing_student = find_student_in_csv(student_id)
-        if existing_student:
-            confirm = messagebox.askyesno("ID Already Exists", f"A student with ID No. {student_id} already exists.\n\nDo you want to override their information?")
-            if not confirm:
-                return  
+    if existing_student:
+        existing_info = f"ID No.: {existing_student[0]}\nName: {existing_student[1]} {existing_student[2]}\nGender: {existing_student[3]}\nYear Level: {existing_student[4]}\nCollege: {existing_student[5]}\nProgram: {existing_student[6]}"
+        confirm = messagebox.askyesno(
+            "ID Already Exists",
+            f"A student with ID No. {student_id} already exists.\n\n{existing_info}\n\nDo you want to override this student?"
+        )
+        if not confirm:
+            return  
 
-            updated_rows = [
-                student_data if row[0] == student_id else row for row in updated_rows
-            ]
-        else:
-            updated_rows.append(student_data)
+    updated_rows.append(student_data)
 
     with open(file_path, "w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
@@ -562,9 +560,6 @@ def remove_focus(event):
         return
 
     tree.selection_remove(tree.selection())
-
-    cancel_butt.pack_forget()
-    search_var.set("")
     root.focus_set()
     
 
@@ -624,7 +619,12 @@ def filter_students():
         original_name = student[1].lower().replace(",", "").strip()
         reversed_name = " ".join(reversed(student[1].split(","))).strip().lower()
 
-        if any(query in value for value in student_values) or query in original_name or query in reversed_name:
+        gender_value = student_values[2]  # Assuming gender is at index 2
+
+        if query == "male" or query == "female":
+            if query == gender_value:
+                filtered_students.append(student)
+        elif any(query in value for i, value in enumerate(student_values) if i != 2) or query in original_name or query in reversed_name:
             filtered_students.append(student)
 
     for student in filtered_students:
@@ -749,7 +749,7 @@ def toggle_form():
         frame.create_window(50,155,window=gender)
         form_widgets.append(gender)
 
-        gender_dropdown = ttk.Combobox(root,style="Custom.TCombobox",values=["Male", "Female", "Other"], state="readonly", width=14,font=(('Arial', 11, 'normal')))
+        gender_dropdown = ttk.Combobox(root,style="Custom.TCombobox",values=["Male", "Female", "Others"], state="readonly", width=14,font=(('Arial', 11, 'normal')))
         frame.create_window(80,180,window=gender_dropdown)
         form_widgets.append(gender_dropdown)
         gender_dropdown.set("Select") 
@@ -784,59 +784,59 @@ def toggle_form():
             "BSCA - Bachelor of Science in Computer Application"
         ],
         "COET - College of Engineering and Technology": [
-            "DCET – Diploma in Chemical Engineering Technology",
-            "BSCerE – Bachelor of Science in Ceramic Engineering",
-            "BSCE – Bachelor of Science in Civil Engineering",
-            "BSEE – Bachelor of Science in Electrical Engineering",
-            "BSME – Bachelor of Science in Mechanical Engineering",
-            "BSChE – Bachelor of Science in Chemical Engineering",
-            "BSMetE – Bachelor of Science in Metallurgical Engineering",
-            "BSCpE – Bachelor of Science in Computer Engineering",
-            "BSMinE – Bachelor of Science in Mining Engineering",
-            "BSECE – Bachelor of Science in Electronics & Communications Engineering",
-            "BSEnET – Bachelor of Science in Environmental Engineering"
+            "DCET - Diploma in Chemical Engineering Technology",
+            "BSCerE - Bachelor of Science in Ceramic Engineering",
+            "BSCE - Bachelor of Science in Civil Engineering",
+            "BSEE - Bachelor of Science in Electrical Engineering",
+            "BSME - Bachelor of Science in Mechanical Engineering",
+            "BSChE - Bachelor of Science in Chemical Engineering",
+            "BSMetE - Bachelor of Science in Metallurgical Engineering",
+            "BSCpE - Bachelor of Science in Computer Engineering",
+            "BSMinE - Bachelor of Science in Mining Engineering",
+            "BSECE - Bachelor of Science in Electronics & Communications Engineering",
+            "BSEnET - Bachelor of Science in Environmental Engineering"
 
         ],
         "CSM - College of Science and Mathematics": [
-            "BSBio Bot – Bachelor of Science in Biology (Botany)",
-            "BSChem – Bachelor of Science in Chemistry",
-            "BSMath – Bachelor of Science in Mathematics",
-            "BSPhys – Bachelor of Science in Physics",
-            "BSBio Zoo – Bachelor of Science in Biology (Zoology)",
-            "BSBio Mar – Bachelor of Science in Biology (Marine)",
-            "BSBio Gen – Bachelor of Science in Biology (General)",
-            "BSStat – Bachelor of Science in Statistics"
+            "BSBio Bot - Bachelor of Science in Biology (Botany)",
+            "BSChem - Bachelor of Science in Chemistry",
+            "BSMath - Bachelor of Science in Mathematics",
+            "BSPhys - Bachelor of Science in Physics",
+            "BSBio Zoo - Bachelor of Science in Biology (Zoology)",
+            "BSBio Mar - Bachelor of Science in Biology (Marine)",
+            "BSBio Gen - Bachelor of Science in Biology (General)",
+            "BSStat - Bachelor of Science in Statistics"
         ],
         "CED - College of Education": [
-            "BEEd SciMath – Bachelor of Elementary Education (Science and Mathematics)",
-            "BEEd Lang – Bachelor of Elementary Education (Language Education)",
-            "BSEd Bio – Bachelor of Secondary Education (Biology)",
-            "BSEd Chem – Bachelor of Secondary Education (Chemistry)",
-            "BSEd Phys – Bachelor of Secondary Education (Physics)",
-            "BSEd Math – Bachelor of Secondary Education (Mathematics)",
-            "BPEd – Bachelor of Physical Education",
-            "BTLED HE – Bachelor of Technology and Livelihood Education (Home Economics)",
-            "BTLed IA – Bachelor of Technology and Livelihood Education (Industrial Arts)",
-            "BTVTED DT – Bachelor of Technical-Vocational Teacher Education (Drafting Technology)"
+            "BEEd SciMath - Bachelor of Elementary Education (Science and Mathematics)",
+            "BEEd Lang - Bachelor of Elementary Education (Language Education)",
+            "BSEd Bio - Bachelor of Secondary Education (Biology)",
+            "BSEd Chem - Bachelor of Secondary Education (Chemistry)",
+            "BSEd Phys - Bachelor of Secondary Education (Physics)",
+            "BSEd Math - Bachelor of Secondary Education (Mathematics)",
+            "BPEd - Bachelor of Physical Education",
+            "BTLED HE - Bachelor of Technology and Livelihood Education (Home Economics)",
+            "BTLed IA - Bachelor of Technology and Livelihood Education (Industrial Arts)",
+            "BTVTED DT - Bachelor of Technical-Vocational Teacher Education (Drafting Technology)"
         ],
         "CASS - College of Arts and Social Sciences": [
-            "BA ELS – Bachelor of Arts in English Language Studies",
-            "BA LCS – Bachelor of Arts in Literary and Cultural Studies",
-            "BA FIL – Bachelor of Arts in Filipino",
-            "BA PAN – Bachelor of Arts in Panitikan",
-            "BA POLSCI – Bachelor of Arts in Political Science",
-            "BA PSY – Bachelor of Arts in Psychology",
-            "BA SOC – Bachelor of Arts in Sociology",
-            "BA HIS IH – Bachelor of Arts in History (International History Track)",
-            "BS PHIL AE – Bachelor of Science in Philosophy",
-            "BS PSY – Bachelor of Science in Psychology"
+            "BA ELS - Bachelor of Arts in English Language Studies",
+            "BA LCS - Bachelor of Arts in Literary and Cultural Studies",
+            "BA FIL - Bachelor of Arts in Filipino",
+            "BA PAN - Bachelor of Arts in Panitikan",
+            "BA POLSCI - Bachelor of Arts in Political Science",
+            "BA PSY - Bachelor of Arts in Psychology",
+            "BA SOC - Bachelor of Arts in Sociology",
+            "BA HIS IH - Bachelor of Arts in History (International History Track)",
+            "BS PHIL AE - Bachelor of Science in Philosophy",
+            "BS PSY - Bachelor of Science in Psychology"
         ],
         "CEBA - College of Economics Business and Accountancy": [
-            "BS ACC – Bachelor of Science in Accountancy",
-            "BSBA BE – Bachelor of Science in Business Administration (Business Economics)",
-            "BSBA MM – Bachelor of Science in Business Administration (Marketing Management)",
-            "BS ENT – Bachelor of Science in Entrepreneurship",
-            "BSHM – Bachelor of Science in Hospitality Management"
+            "BS ACC - Bachelor of Science in Accountancy",
+            "BSBA BE - Bachelor of Science in Business Administration (Business Economics)",
+            "BSBA MM - Bachelor of Science in Business Administration (Marketing Management)",
+            "BS ENT - Bachelor of Science in Entrepreneurship",
+            "BSHM - Bachelor of Science in Hospitality Management"
         ],
         "CHS - College of Health Sciences": [
             "BSN - Bachelor of Science in Nursing",
@@ -947,7 +947,7 @@ def load_students():
                     gender = row[3]
                     year_level = row[4]
                     college = row[5].split(" - ")[0] 
-                    program = row[6].split(" - ")[0] 
+                    program = row[6].split(" - ")[0] if " - " in row[6] else row[6]
                     students.append([row[0], full_name, gender, year_level, college, program])
     return students
 
@@ -980,6 +980,7 @@ def display_students():
         tree.grid(row=0, column=0, sticky="nsew", pady=(70, 0), padx=(20, 0))
 
         style = ttk.Style()
+        
         style.configure("Treeview", font=('Albert Sans', 12), rowheight=40, padding=(5, 5), highlightthickness=0, borderwidth=0)
         style.configure("Treeview.Heading", font=('Albert Sans', 15, 'bold'), anchor="w", padding=(1, 8), foreground="#9F9EA1", relief="flat", borderwidth=0)
         style.layout("Treeview", [('Treeview.treearea', {'sticky': 'nswe'})])
@@ -987,31 +988,52 @@ def display_students():
 
         scrollbar = ttk.Scrollbar(content_frame, orient="vertical", command=tree.yview)
         tree.configure(yscrollcommand=scrollbar.set)
-        scrollbar.place(relx=1.0, rely=0.14, relheight=0.85, anchor="ne")
+        scrollbar.place(relx=1.0, rely=0.125, relheight=0.855, anchor="ne")
 
-        scroll_indicator = Canvas(content_frame, height=4, bg="lightgray", highlightthickness=0)
+        scroll_indicator = Canvas(content_frame, height=4, bg="light gray", highlightthickness=0)
         scroll_indicator.place_forget()
 
         def on_tree_scroll(*args):
             first, last = tree.yview()
-            if first > 0:  
-                scroll_indicator.place(relx=0.028, rely=0.20, relwidth=0.88, anchor="nw")
-                up_arrow.place(relx=0.97, rely=0.9, anchor="ne") 
+            if first > 0:
+                tree_x = tree.winfo_x()
+                tree_y = tree.winfo_y()
+                tree_width = tree.winfo_width()
+                heading_height = style.lookup("Treeview.Heading", "padding")[1] * 4.5  # distance from heading
+
+                scroll_indicator.place(x=tree_x, y=tree_y + heading_height, 
+                                      width=tree_width - 80,  # scroll indicator width
+                                      height=4)
+                up_arrow.place(relx=0.97, rely=0.9, anchor="ne")
             else:
                 scroll_indicator.place_forget()
                 up_arrow.place_forget()
 
         tree.configure(yscrollcommand=lambda *args: (scrollbar.set(*args), on_tree_scroll(*args)))
+        
+        def update_scroll_indicator_position(*args):
+            if scroll_indicator.winfo_ismapped():
+                first, last = tree.yview()
+                if first > 0:
+                    tree_x = tree.winfo_x()
+                    tree_y = tree.winfo_y()
+                    tree_width = tree.winfo_width()
+                    heading_height = style.lookup("Treeview.Heading", "padding")[1] * 2
+                    
+                    scroll_indicator.place(x=tree_x, y=tree_y + heading_height, 
+                                          width=tree_width - 20, 
+                                          height=4)
+        
+        content_frame.bind("<Configure>", update_scroll_indicator_position)
+        
         def scroll_to_top():
             tree.yview_moveto(0)
 
         def scroll_to_bottom():
             tree.yview_moveto(1)
 
-
         up_arrow = Button(content_frame, text="▲", command=scroll_to_top, bg="white", fg="black", font=("Arial", 8, "bold"), bd=0)
         down_arrow = Button(content_frame, text="▼", command=scroll_to_bottom, bg="white", fg="black", font=("Arial", 8, "bold"), bd=0)
-
 
         down_arrow.place(relx=0.97, rely=0.95, anchor="ne") 
 
@@ -1048,6 +1070,8 @@ def display_students():
                 tree.after(1, lambda: tree.selection_remove(clicked_item))
             else:
                 tree.after(1, lambda: tree.selection_set(clicked_item))
+        else:
+            tree.after(1, lambda: tree.selection_remove(selected_item))
 
     tree.bind("<Button-1>", toggle_selection)
 
@@ -1089,7 +1113,6 @@ def sort_id():
         id_text.configure(text="Descending")
     else:
         id_text.configure(text="Ascending")
-
 
 def sort_name(event=None):
     global tree, sort_order
@@ -1135,21 +1158,25 @@ def sort_click_release(event):
             widget = event.widget 
 
             if widget in [sort_text, name_sort_bg]:  
-                name_sort_bg.itemconfig(sort_butt, fill='#153E83')
-                sort_text.configure(bg="#153E83", fg="white")
+                name_sort_bg.itemconfig(sort_butt, fill='#A5CAEC')
+                sort_text.configure(bg="#A5CAEC", fg="#153E83")
 
             elif widget in [id_text, id_sort_bg]:  
-                id_sort_bg.itemconfig(id_butt, fill='#153E83')
-                id_text.configure(bg="#153E83", fg="white")
+                id_sort_bg.itemconfig(id_butt, fill='#A5CAEC')
+                id_text.configure(bg="#A5CAEC", fg="#153E83")
         
         def id_release(event):
+            id_sort_bg.itemconfig(id_butt, fill='#153E83')
+            id_text.config(bg='#153E83', fg='white')   
             sort_id()
         def name_release(event):
+            name_sort_bg.itemconfig(sort_butt, fill='#153E83')
+            sort_text.config(bg='#153E83', fg='white')  
             sort_name()
 
         def name_sort_hover(event):
-            name_sort_bg.itemconfig(sort_butt, fill='#A5CAEC')
-            sort_text.config(bg='#A5CAEC', fg='#154BA6')  
+            name_sort_bg.itemconfig(sort_butt, fill='#153E83')
+            sort_text.config(bg='#153E83', fg='white')  
             name_sort_bg.config(cursor="hand2")
             sort_text.configure(cursor="hand2")
 
@@ -1159,8 +1186,8 @@ def sort_click_release(event):
             name_sort_bg.config(cursor="")
 
         def id_sort_hover(event):
-            id_sort_bg.itemconfig(id_butt, fill='#A5CAEC')
-            id_text.config(bg='#A5CAEC', fg='#154BA6')  
+            id_sort_bg.itemconfig(id_butt, fill='#153E83')
+            id_text.config(bg='#153E83', fg='white')  
             id_sort_bg.config(cursor="hand2")
             id_text.configure(cursor="hand2")
 
