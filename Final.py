@@ -47,10 +47,13 @@ def save_to_csv(update_mode=False, old_id=None):
     headers = ["ID No.", "Last Name", "First Name", "Gender", "Year Level", "College", "Program"]
 
     student_id = id_no.get()
+    last_name_value = last_name.get().title()
+    first_name_value = first_name.get().title()
+    
     student_data = [
         student_id,
-        last_name.get().title(),
-        first_name.get().title(),
+        last_name_value,
+        first_name_value,
         gender_dropdown.get(),
         year_dropdown.get(),
         college_dropdown.get(),
@@ -63,11 +66,17 @@ def save_to_csv(update_mode=False, old_id=None):
     if not re.match(id_pattern, student_id) or any(char.isalpha() for char in student_id):
         errors.append("• ID No. must be in the format XXXX-XXXX (e.g., 2024-1234) and contain only numbers.")
 
-    if any(char.isdigit() for char in last_name.get()):
+    if any(char.isdigit() for char in last_name_value):
         errors.append("• Last Name must not contain numbers.")
+    
+    if not all(char.isalpha() or char in [' ', '-'] for char in last_name_value):
+        errors.append("• Last Name must contain only letters, spaces, or hyphens.")
 
-    if any(char.isdigit() for char in first_name.get()):
+    if any(char.isdigit() for char in first_name_value):
         errors.append("• First Name must not contain numbers.")
+    
+    if not all(char.isalpha() or char in [' ', '-'] for char in first_name_value):
+        errors.append("• First Name must contain only letters, spaces, or hyphens.")
 
     if "" in student_data[:3]:
         errors.append("• All fields (ID No., Last Name, First Name) must be filled out.")
@@ -335,11 +344,14 @@ def edit_stud(event):
 
 def update_student(old_id):
     file_path = "students.csv"
-
+    
+    last_name_value = last_name.get().title()
+    first_name_value = first_name.get().title()
+    
     new_data = [
         id_no.get(),
-        last_name.get().title(),
-        first_name.get().title(),
+        last_name_value,
+        first_name_value,
         gender_dropdown.get(),
         year_dropdown.get(),
         college_dropdown.get(),
@@ -352,11 +364,17 @@ def update_student(old_id):
     if not re.match(id_pattern, id_no.get()) or any(char.isalpha() for char in id_no.get()):
         errors.append("• ID No. must be in the format XXXX-XXXX (e.g., 2024-1234) and contain only numbers.")
 
-    if any(char.isdigit() for char in last_name.get()):
+    if any(char.isdigit() for char in last_name_value):
         errors.append("• Last Name must not contain numbers.")
+        
+    if not all(char.isalpha() or char in [' ', '-'] for char in last_name_value):
+        errors.append("• Last Name must contain only letters, spaces, or hyphens.")
 
-    if any(char.isdigit() for char in first_name.get()):
+    if any(char.isdigit() for char in first_name_value):
         errors.append("• First Name must not contain numbers.")
+        
+    if not all(char.isalpha() or char in [' ', '-'] for char in first_name_value):
+        errors.append("• First Name must contain only letters, spaces, or hyphens.")
 
     if "" in new_data[:3]: 
         errors.append("• All fields (ID No., Last Name, First Name) must be filled out.")
